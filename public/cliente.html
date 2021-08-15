@@ -1,0 +1,43 @@
+<html>
+<body>
+
+<h1>CLiente-Express</h1>
+<!-- Stream video via webcam -->
+<img id="StreamCliente">
+
+</body>
+	 <script src="/socket.io/socket.io.js"></script>
+	  <script>
+	  let ClienteStream = document.getElementById("StreamCliente");
+	  // conenction
+	  let socket = io();
+
+function Play(){
+
+	'use strict'
+	  
+		  socket.on("init-stream",function(image){
+		  
+					<!-- ClienteStream.src = image; -->
+					ClienteStream.src = image;
+					
+					<!-- console.log(image) -->
+		  
+		  })	
+
+		  socket.on("init-stream2",function(image){
+		  
+					<!-- ClienteStream.src = image; -->
+					ClienteStream.src = image;
+					
+					<!-- console.log(image) -->
+		  
+		  })
+		  
+		  
+	  
+		console.log("cliente activo")
+	  }
+	  Play();
+	  </script>
+</html>

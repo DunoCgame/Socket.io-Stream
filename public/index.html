@@ -1,0 +1,98 @@
+<html>
+<style>
+.video-wrap{
+	display:flex;
+}
+</style>
+
+
+<body>
+
+<h1>Server-Express</h1>
+<!-- Stream video via webcam -->
+<div class="video-wrap">
+    <video id="video" playsinline autoplay></video>
+	<audio id="reproductor" src="" type="audio/mpeg" preload="preload" controls> </audio>
+	<!-- Webcam video snapshot -->
+	<canvas id="canvas" width="400" height="400"></canvas>
+	
+</div>
+
+
+
+<!-- Trigger canvas web API -->
+<div class="controller">
+    <button id="snap">Capture</button>
+</div>
+</body>
+	 <script src="/socket.io/socket.io.js"></script>
+	  <script>
+			
+			
+// conenction
+let socket = io();
+
+//Socket.io
+<!-- socket.on("Hola",(arg) => { -->
+  <!-- console.log(arg); -->
+  <!-- socket.emit('Hola2', "Hola desde web server"); -->
+<!-- }); -->
+
+/**Select Video**/
+
+const video = document.getElementById('video');
+const canvas = document.getElementById('canvas');
+const snap = document.getElementById("snap");
+const errorMsgElement = document.querySelector('span#errorMsg');
+
+const constraints = {
+  audio: true,
+	  video: {
+		width: 400, height: 300
+	  }
+};
+
+// Access webcam
+async function init(){
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia(constraints);
+    handleSuccess(stream);
+	
+	
+  }
+  catch(e){
+    errorMsgElement.innerHTML = `navigator.getUserMedia error:${e.toString()}`;
+  }
+} //cierre
+
+// Success
+function handleSuccess(stream){
+			  window.stream = stream;
+			  video.srcObject = stream;
+				<!-- console.log(stream); -->
+				socket.emit('stream2',stream);
+
+
+}
+
+// Load init
+init();
+
+var context = canvas.getContext('2d');
+
+(function transData(){
+
+var outputStream = canvas.toDataURL('image/jpeg', .2);
+			
+			
+		context.drawImage(video, 0, 0, 400, 400);
+		socket.emit('stream',outputStream);
+
+		requestAnimationFrame(transData)
+		
+})();
+
+	  
+	  
+	  </script>
+</html>
